@@ -1,0 +1,53 @@
+FROM centos:6.10
+
+# Absolutely first thing to do is to enable the overlay
+# filesystem support for yum or things will be pretty unstable
+# and unpredictable
+RUN yum install -y yum-plugin-ovl
+
+# We are using some of the libraries in epel so lets enable it
+# and get the stuff actually from the "official" repo instead of
+# having old versions hanging around in git.
+RUN yum --enablerepo=extras install -y epel-release
+
+# OK now the minimum we need to actually compile the packages
+RUN yum install -y gcc
+RUN yum install -y gcc-c++
+RUN yum install -y make
+RUN yum install -y cmake
+RUN yum install -y openssl-devel
+RUN yum install -y libxml2-devel
+RUN yum install -y unzip
+
+RUN yum install -y gtest-devel
+RUN yum install -y openldap-devel
+
+RUN yum install -y unixODBC
+RUN yum install -y unixODBC-devel
+RUN yum install -y mysql-connector-odbc
+RUN yum install -y redhat-lsb-core
+RUN yum install -y rpm-build
+RUN yum install -y redhat-rpm-config
+RUN yum install -y rsync
+RUN yum install -y which
+RUN yum install -y newt
+
+# Pull the extra packages from epel
+RUN mkdir /RPMS
+RUN yum install -y yum-plugin-downloadonly
+RUN yum install -y --downloadonly --downloaddir=/RPMS libmcrypt
+RUN yum install -y --downloadonly --downloaddir=/RPMS php-mcrypt
+RUN yum install -y --downloadonly --downloaddir=/RPMS php-pecl-radius
+
+RUN yum install -y libmcrypt
+RUN yum install -y php-mcrypt
+RUN yum install -y php-pecl-radius
+
+ENV VERSION=1.0.0
+ENV PROJECT_VERSION=1.0.0
+ENV BUILD_NUMBER=1
+ENV REVISION=1
+ENV BLD_NMBR=1
+ENV BUILDING_FOR=el6
+
+VOLUME /work
