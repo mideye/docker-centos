@@ -1,0 +1,48 @@
+FROM rockylinux:9
+
+# Update the package list and install dnf plugins (equivalent to yum-plugin-ovl in Rocky 9)
+RUN dnf -y update
+RUN dnf -y install dnf-plugins-core
+
+# Install development tools
+RUN dnf groupinstall -y "Development Tools"
+
+# Install necessary development libraries and utilities
+RUN dnf install -y \
+    gcc \
+    gcc-c++ \
+    make \
+    cmake \
+    openssl-devel \
+    libxml2-devel \
+    unzip \
+    gtest-devel \
+    openldap-devel \
+    unixODBC \
+    unixODBC-devel \
+    mysql-connector-odbc \
+    redhat-lsb-core \
+    rpm-build \
+    redhat-rpm-config \
+    rsync \
+    which \
+    newt \
+    libmcrypt-devel
+
+# Rocky 9 does not include mcrypt or php-mcrypt in its default repositories.
+# You may need to add the "EPEL" (Extra Packages for Enterprise Linux) repository to get additional packages.
+RUN dnf install -y epel-release
+
+# Install packages from EPEL if required
+RUN dnf install -y libmcrypt php-mcrypt php-pecl-radius
+
+# Set environment variables
+ENV VERSION=1.0.0
+ENV PROJECT_VERSION=1.0.0
+ENV BUILD_NUMBER=1
+ENV REVISION=1
+ENV BLD_NMBR=1
+ENV BUILDING_FOR=el9
+
+# Define volume for work directory
+VOLUME /work
