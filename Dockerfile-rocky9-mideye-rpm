@@ -1,10 +1,10 @@
 FROM rockylinux:9
 
-# Update the package list and install dnf plugins (equivalent to yum-plugin-ovl in Rocky 9)
+# Update the package list and install dnf plugins
 RUN dnf -y update
 RUN dnf -y install dnf-plugins-core
 
-# Install development tools
+# Install development tools and necessary libraries
 RUN dnf groupinstall -y "Development Tools"
 
 # Install necessary development libraries and utilities
@@ -16,25 +16,33 @@ RUN dnf install -y \
     openssl-devel \
     libxml2-devel \
     unzip \
-    gtest-devel \
     openldap-devel \
     unixODBC \
-    unixODBC-devel \
-    mysql-connector-odbc \
-    redhat-lsb-core \
     rpm-build \
     redhat-rpm-config \
     rsync \
     which \
     newt \
-    libmcrypt-devel
+    epel-release
 
-# Rocky 9 does not include mcrypt or php-mcrypt in its default repositories.
-# You may need to add the "EPEL" (Extra Packages for Enterprise Linux) repository to get additional packages.
+# Install alternatives for unavailable packages
+# gtest-devel alternative:
+RUN dnf install -y gmock gtest
+
+# mysql-connector-odbc is not available, install MariaDB ODBC connector instead:
+RUN dnf install -y mariadb-connector-odbc
+
+# Install lsb-release as an alternative to redhat-lsb-core
+RUN dnf install -y lsb-release
+
+# libmcrypt is deprecated, you may need to build it from source or exclude it if not necessary
+# Uncomment the following lines if you want to build it from source.
+# RUN dnf install -y wget
+# RUN wget https://github.com/php/pecl-encryption-mcrypt/archive/refs/tags/mcrypt-1.0.4.tar.gz
+# RUN tar -xvzf mcrypt-1.0.4.tar.gz && cd pecl-encryption-mcrypt-mcrypt-1.0.4 && phpize && ./configure && make && make install
+
+# Enable EPEL repository for extra packages
 RUN dnf install -y epel-release
-
-# Install packages from EPEL if required
-RUN dnf install -y libmcrypt php-mcrypt php-pecl-radius
 
 # Set environment variables
 ENV VERSION=1.0.0
