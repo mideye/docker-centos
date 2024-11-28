@@ -36,9 +36,8 @@ RUN dnf install -y mariadb-connector-odbc
 RUN dnf install -y lsb-release
 
 # Add Node.js repository and install Node.js
-RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash - && \
-    dnf install -y nodejs && \
-    dnf clean all
+RUN curl -sL https://rpm.nodesource.com/setup_20.x | bash - && \
+    dnf install -y nodejs
 
 # Verify Node.js installation
 RUN node --version && npm --version
