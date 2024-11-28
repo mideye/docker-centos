@@ -35,6 +35,14 @@ RUN dnf install -y mariadb-connector-odbc
 # Install lsb-release as an alternative to redhat-lsb-core
 RUN dnf install -y lsb-release
 
+# Add Node.js repository and install Node.js
+RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash - && \
+    dnf install -y nodejs && \
+    dnf clean all
+
+# Verify Node.js installation
+RUN node --version && npm --version
+
 # libmcrypt is deprecated, you may need to build it from source or exclude it if not necessary
 # Uncomment the following lines if you want to build it from source.
 # RUN dnf install -y wget
