@@ -24,6 +24,7 @@ RUN dnf install -y \
     which \
     newt \
     maven \
+    expect \
     epel-release
 
 # Install alternatives for unavailable packages
