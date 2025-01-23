@@ -23,6 +23,7 @@ RUN dnf install -y \
     rsync \
     which \
     newt \
+    maven \
     epel-release
 
 # Install alternatives for unavailable packages
